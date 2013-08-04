@@ -18,14 +18,12 @@ namespace PhrasebookMaker
 		{
 			Console.WriteLine ("PhrasebookMaker Start");
 
-			//Get Translations from file
-			XElement xelement = XElement.Load ("../../wpsresource.ts");
-			string language = xelement.Element("TS").Attribute("language").Value;
-
-
-			var messages = from message in xelement.Descendants ("message")
+			//Get Translations and Language from file
+			XDocument translationSource = XDocument.Load ("../../wpsresource.ts");
+			string language = translationSource.Descendants("TS").First().Attribute("language").Value;
+			var messages = (from message in translationSource.Descendants ("message")
 			           where (string)message.Element ("translation") != ""
-			           select message;
+			           select message).Distinct();
 
 
 			//Make new Phrasebook
@@ -45,6 +43,8 @@ namespace PhrasebookMaker
 
 			//Save Phrasebook
 			phrases.Save ("../../wpsresource.qph");
+
+			Console.WriteLine ("PhrasebookMaker Stop");
 		}
 	}
 }
