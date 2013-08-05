@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using System.IO;
 
 namespace PhrasebookMaker
 {
@@ -14,12 +15,12 @@ namespace PhrasebookMaker
 
 		}
 
-		public void Start ()
+		public void Start (string pathToFile)
 		{
-			Console.WriteLine ("PhrasebookMaker Start");
+			Console.WriteLine ("Making Phrasebook from " + pathToFile);
 
 			//Get Translations and Language from file
-			XDocument translationSource = XDocument.Load ("../../wpsresource.ts");
+			XDocument translationSource = XDocument.Load (pathToFile);
 			string language = translationSource.Descendants("TS").First().Attribute("language").Value;
 			var messages = (from message in translationSource.Descendants ("message")
 			           where (string)message.Element ("translation") != ""
@@ -42,9 +43,9 @@ namespace PhrasebookMaker
 			}
 
 			//Save Phrasebook
-			phrases.Save ("../../wpsresource.qph");
+			phrases.Save (Path.ChangeExtension(pathToFile,".qph"));
 
-			Console.WriteLine ("PhrasebookMaker Stop");
+			Console.WriteLine ("Phrasebook successfully written to " + Path.ChangeExtension(pathToFile,".qph"));
 		}
 	}
 }
