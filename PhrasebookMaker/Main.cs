@@ -27,5 +27,7 @@ namespace PhrasebookMaker
 			PhrasebookMaker pm = new PhrasebookMaker();
 			pm.Start(pathToFile);
 		}
+
+
 	}
 }

@@ -15,6 +15,8 @@ namespace PhrasebookMaker
 
 		}
 
+
+
 		public void Start (string pathToFile)
 		{
 			Console.WriteLine ("Making Phrasebook from " + pathToFile);
@@ -24,7 +26,7 @@ namespace PhrasebookMaker
 			string language = translationSource.Descendants("TS").First().Attribute("language").Value;
 			var messages = (from message in translationSource.Descendants ("message")
 			           where (string)message.Element ("translation") != ""
-			           select message).Distinct();
+			           select message).DistinctBy(message =>message.Element("source").Value);
 
 
 			//Make new Phrasebook
